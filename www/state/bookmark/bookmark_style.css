@@ -1,0 +1,9 @@
+.button.button-clear.button-calm.bookmark_active{
+    color:#ffffff;
+    background-color: #FF565A;
+    border-radius: 0px 0px 0px 0px;
+}
+
+.bookmark_item{
+    height:70px;
+}

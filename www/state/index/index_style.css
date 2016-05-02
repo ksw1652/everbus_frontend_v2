@@ -1,0 +1,33 @@
+/* configpopover style */
+ion-popover-view.fit {
+    height: auto;
+}
+
+ion-popover-view.fit ion-content {
+    position: relative;
+}
+
+.platform-android ion-popover-view.fit {
+    margin-top: 10px;
+}
+
+.platform-ios ion-popover-view.fit {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.popover_icon::before{
+    font-size:25px;
+}
+
+.popover_text {
+    font-size:14px;
+}
+
+/* moreinfomodal style */
+.everbus_logoimg {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:30px;
+    display: block;
+}

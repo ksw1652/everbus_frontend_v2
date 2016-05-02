@@ -1,0 +1,90 @@
+/* shareplace style */
+.button.button-clear.button-calm.share_active{
+    color:#ffffff;
+    background-color: #FF565A;
+}
+
+.story_image{
+    max-width:100%;
+    width:100%;
+    height:auto;
+}
+
+/* map in shareplace.html custom-marker style */
+.my1 {
+    font-size: 1.5em;
+    background: #FF565A;
+    /*-webkit-border-radius: 4px;
+    -moz-border-radius: 4px;*/
+    /*border-radius: 10px;*/
+    padding-top:1px;
+    padding-left:1px;
+    padding-right:1px;
+}
+
+.my1:before {
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 7px 6px 0;
+    border-color: #FF565A transparent;
+    /*border-radius: 10px;*/
+    display: block;
+    width: 0;
+    z-index: 0;
+    margin-left: -6px;
+    bottom: -7px;
+    left: 50%;
+}
+
+.custom-marker img {
+    width:70px;
+    height:70px;
+    margin:2px;
+    /*border-radius:10px;*/
+}
+
+/* aroundmodal style */
+.ion-nifty-modal {
+    width: 90%;
+    min-height: 0 !important;
+    height: 80% !important;
+    top: 10%;
+    left: 5%;
+    right: 5%;
+    bottom: 5%;
+    background-color: transparent;
+    border-radius: 10px;
+    -webkit-box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5); }
+
+.ion-nifty-modal .ion-modal-content-custom {
+    width: 100%;
+    height: 100%;
+    background-color: #333;
+    border-radius: 10px;
+}
+
+.ion-nifty-modal .ion-modal-content-custom p{
+    color:white;
+    padding:10px;
+    font-size:17px;
+}
+
+.ion-nifty-modal .ion-modal-content-custom h3{
+    color:white;
+    padding :10px;
+}
+
+.success_getplaceinfo {
+    color:#ffffff;
+    background-color: rgba(59, 132, 255, 0.8);
+}
+
+#shareplace_map .angular-google-map-container{
+    height:380px !important;
+}
+
+/*.gm-style-iw + div{
+  display: none;
+}*/

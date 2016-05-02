@@ -1,0 +1,206 @@
+<ion-view>
+    <ion-nav-back-button class="button-clear"><i class="ion-arrow-left-c"></i> 뒤로</ion-nav-back-button>
+    <ion-nav-title>
+        &nbsp;에버버스
+    </ion-nav-title>
+    <!--<ion-nav-buttons side="right">
+        <button class="button button-icon ion-loop"
+                ng-click=""></button>
+    </ion-nav-buttons>-->
+    <ion-content overflow-scroll="true" padding="false" class="has-header">
+        <div class="button-bar">
+            <a class="button button-clear button-calm placesearchresult_btnbar"
+               ng-class="{'placepath_active': isActive('metro')}" ng-click="setActive('metro');">지하철({{metro_pathList.length}})</a>
+            <a class="button button-clear button-calm placesearchresult_btnbar"
+               ng-class="{'placepath_active': isActive('bus')}" ng-click="setActive('bus');">버스({{bus_pathList.length}})</a>
+            <a class="button button-clear button-calm placesearchresult_btnbar"
+               ng-class="{'placepath_active': isActive('train')}" ng-click="setActive('train');">기차({{train_pathList.length}})</a>
+            <a class="button button-clear button-calm placesearchresult_btnbar"
+               ng-class="{'placepath_active': isActive('express')}" ng-click="setActive('express');">고속({{express_pathList.length}})</a>
+        </div>
+
+        <!--지하철-->
+        <div class="card" style="margin:10px;" ng-show="active == 'metro'" ng-repeat="metro in metro_pathList">
+            <a class="item" style="padding-bottom: 0px;">
+                <div class="row" style="padding-bottom: 0px;">
+                    <div class="col-80" style="padding-right:10px;">
+                        <h2 ng-show="metro.second_bus_st != undefined" style="white-space: normal; height:60px;">
+                            {{metro.second_bus_st != undefined ? metro.second_bus_st.ST_STOPNM + ' >> ' + metro.second_bus_st.ED_STOPNM : ''}}
+                        </h2>
+                        <h2 ng-show="metro.third_bus_st != undefined" style="white-space: normal; height:60px;">
+                            {{metro.third_bus_st != undefined ? metro.third_bus_st.ST_STOPNM + ' >> ' + metro.third_bus_st.ED_STOPNM : ''}}
+                        </h2>
+                        <h2 ng-show="metro.second_metro_st != undefined" style="white-space: normal; height:60px;">
+                            {{metro.second_metro_st != undefined ? metro.second_metro_st.ST_METRONM+ ' >> ' + metro.second_metro_st.ED_METRONM : ''}}
+                        </h2>
+                        <h2 style="white-space: normal; height:60px;">
+                            {{metro.first.ST_METRONM}} >> {{metro.first.ED_METRONM}}
+                        </h2>
+                        <h2 ng-show="metro.second_bus_ed != undefined" style="white-space: normal; height:60px;">
+                            {{metro.second_bus_ed != undefined ? metro.second_bus_ed.ST_STOPNM + ' >> ' + metro.second_bus_ed.ED_STOPNM : ''}}
+                        </h2>
+                        <h2 ng-show="metro.second_metro_ed != undefined" style="white-space: normal; height:60px;">
+                            {{metro.second_metro_ed != undefined ? metro.second_metro_ed.ST_METRONM+ ' >> ' + metro.second_metro_ed.ED_METRONM : ''}}
+                        </h2>
+                        <h2 ng-show="metro.third_bus_ed != undefined" style="white-space: normal; height:60px;">
+                            {{metro.third_bus_ed != undefined ? metro.third_bus_ed.ST_STOPNM + ' >> ' + metro.third_bus_ed.ED_STOPNM : ''}}
+                        </h2>
+                    </div>
+                    <div class="col-20">
+                        <vehicletype-directive ng-show="metro.second_bus_st != undefined" vehicle-type="'B'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="metro.third_bus_st != undefined" vehicle-type="'B'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="metro.second_metro_st != undefined" vehicle-type="'M'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="metro.first != undefined" vehicle-type="'M'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="metro.second_bus_ed != undefined" vehicle-type="'B'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="metro.second_metro_ed != undefined" vehicle-type="'M'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="metro.third_bus_ed != undefined" vehicle-type="'B'" vehicle-train=""></vehicletype-directive>
+                    </div>
+                </div>
+            </a>
+            <div class="item item-icon-right" ng-click="gotoplacedetail(metro)">
+                <p>{{ (metro.second_bus_st.VIA_DIST + metro.third_bus_st.VIA_DIST + metro.second_metro_st.VIA_DIST +
+                    metro.first.VIA_DIST + metro.second_bus_ed.VIA_DIST + metro.second_metro_ed.VIA_DIST +
+                    metro.third_bus_ed.VIA_DIST) / 1000}}km</p>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </div>
+        </div>
+
+        <!--버스-->
+        <div class="card" style="margin:10px;" ng-show="active == 'bus'" ng-repeat="bus in bus_pathList">
+            <a class="item" style="padding-bottom: 0px;">
+                <div class="row" style="padding-bottom: 0px;">
+                    <div class="col-80" style="padding-right:10px;">
+                        <h2 ng-show="bus.second_bus_st != undefined" style="white-space: normal; height:60px;">
+                            {{bus.second_bus_st != undefined ? bus.second_bus_st.ST_STOPNM + ' >> ' + bus.second_bus_st.ED_STOPNM : ''}}
+                        </h2>
+                        <h2 ng-show="bus.third_bus_st != undefined" style="white-space: normal; height:60px;">
+                            {{bus.third_bus_st != undefined ? bus.third_bus_st.ST_STOPNM + ' >> ' + bus.third_bus_st.ED_STOPNM : ''}}
+                        </h2>
+                        <h2 ng-show="bus.second_metro_st != undefined" style="white-space: normal; height:60px;">
+                            {{bus.second_metro_st != undefined ? bus.second_metro_st.ST_METRONM+ ' >> ' + bus.second_metro_st.ED_METRONM : ''}}
+                        </h2>
+                        <h2 style="white-space: normal; height:60px;">
+                            {{bus.first.ST_STOPNM}} >> {{bus.first.ED_STOPNM}}
+                        </h2>
+                        <h2 ng-show="bus.second_bus_ed != undefined" style="white-space: normal; height:60px;">
+                            {{bus.second_bus_ed != undefined ? bus.second_bus_ed.ST_STOPNM + ' >> ' + bus.second_bus_ed.ED_STOPNM : ''}}
+                        </h2>
+                        <h2 ng-show="bus.second_metro_ed != undefined" style="white-space: normal; height:60px;">
+                            {{bus.second_metro_ed != undefined ? bus.second_metro_ed.ST_METRONM+ ' >> ' + bus.second_metro_ed.ED_METRONM : ''}}
+                        </h2>
+                        <h2 ng-show="bus.third_bus_ed != undefined" style="white-space: normal; height:60px;">
+                            {{bus.third_bus_ed != undefined ? bus.third_bus_ed.ST_STOPNM + ' >> ' + bus.third_bus_ed.ED_STOPNM : ''}}
+                        </h2>
+                    </div>
+                    <div class="col-20">
+                        <vehicletype-directive ng-show="bus.second_bus_st != undefined" vehicle-type="'B'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="bus.third_bus_st != undefined" vehicle-type="'B'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="bus.second_metro_st != undefined" vehicle-type="'M'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="bus.first != undefined" vehicle-type="'B'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="bus.second_bus_ed != undefined" vehicle-type="'B'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="bus.second_metro_ed != undefined" vehicle-type="'M'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="bus.third_bus_ed != undefined" vehicle-type="'B'" vehicle-train=""></vehicletype-directive>
+                    </div>
+                </div>
+            </a>
+            <div class="item item-icon-right" ng-click="gotoplacedetail(bus)">
+                <p>{{ (bus.second_bus_st.VIA_DIST + bus.third_bus_st.VIA_DIST + bus.second_metro_st.VIA_DIST +
+                    bus.first.VIA_DIST + bus.second_bus_ed.VIA_DIST + bus.second_metro_ed.VIA_DIST +
+                    bus.third_bus_ed.VIA_DIST) / 1000}}km</p>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </div>
+        </div>
+
+        <!--기차-->
+        <div class="card" style="margin:10px;" ng-show="active == 'train'" ng-repeat="train in train_pathList">
+            <a class="item" style="padding-bottom: 0px;">
+                <div class="row" style="padding-bottom: 0px;">
+                    <div class="col-80" style="padding-right:10px;">
+                        <h2 ng-show="train.second_bus_st != undefined" style="white-space: normal; height:60px;">
+                            {{train.second_bus_st != undefined ? train.second_bus_st.ST_STOPNM + ' >> ' + train.second_bus_st.ED_STOPNM : ''}}
+                        </h2>
+                        <h2 ng-show="train.third_bus_st != undefined" style="white-space: normal; height:60px;">
+                            {{train.third_bus_st != undefined ? train.third_bus_st.ST_STOPNM + ' >> ' + train.third_bus_st.ED_STOPNM : ''}}
+                        </h2>
+                        <h2 ng-show="train.second_metro_st != undefined" style="white-space: normal; height:60px;">
+                            {{train.second_metro_st != undefined ? train.second_metro_st.ST_METRONM+ ' >> ' + train.second_metro_st.ED_METRONM : ''}}
+                        </h2>
+                        <h2 style="white-space: normal; height:60px;">
+                            {{train.first.ST_TRAIN_STOPNM}} >> {{train.first.ED_TRAIN_STOPNM}}
+                        </h2>
+                        <h2 ng-show="train.second_bus_ed != undefined" style="white-space: normal; height:60px;">
+                            {{train.second_bus_ed != undefined ? train.second_bus_ed.ST_STOPNM + ' >> ' + train.second_bus_ed.ED_STOPNM : ''}}
+                        </h2>
+                        <h2 ng-show="train.second_metro_ed != undefined" style="white-space: normal; height:60px;">
+                            {{train.second_metro_ed != undefined ? train.second_metro_ed.ST_METRONM+ ' >> ' + train.second_metro_ed.ED_METRONM : ''}}
+                        </h2>
+                        <h2 ng-show="train.third_bus_ed != undefined" style="white-space: normal; height:60px;">
+                            {{train.third_bus_ed != undefined ? train.third_bus_ed.ST_STOPNM + ' >> ' + train.third_bus_ed.ED_STOPNM : ''}}
+                        </h2>
+                    </div>
+                    <div class="col-20">
+                        <vehicletype-directive ng-show="train.second_bus_st != undefined" vehicle-type="'B'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="train.third_bus_st != undefined" vehicle-type="'B'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="train.second_metro_st != undefined" vehicle-type="'M'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="train.first != undefined" vehicle-type="'T'" vehicle-train="train.first.T_CD_DESC"></vehicletype-directive>
+                        <vehicletype-directive ng-show="train.second_bus_ed != undefined" vehicle-type="'B'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="train.second_metro_ed != undefined" vehicle-type="'M'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="train.third_bus_ed != undefined" vehicle-type="'B'" vehicle-train=""></vehicletype-directive>
+                    </div>
+                </div>
+            </a>
+            <div class="item item-icon-right" ng-click="gotoplacedetail(train)">
+                <p>{{ (train.second_bus_st.VIA_DIST + train.third_bus_st.VIA_DIST + train.second_metro_st.VIA_DIST +
+                    train.first.VIA_DIST + train.second_bus_ed.VIA_DIST + train.second_metro_ed.VIA_DIST +
+                    train.third_bus_ed.VIA_DIST) / 1000}}km</p>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </div>
+        </div>
+
+        <!--고속버스-->
+        <div class="card" style="margin:10px;" ng-show="active == 'express'" ng-repeat="express in express_pathList">
+            <a class="item" style="padding-bottom: 0px;">
+                <div class="row" style="padding-bottom: 0px;">
+                    <div class="col-80" style="padding-right:10px;">
+                        <h2 ng-show="express.second_bus_st != undefined" style="white-space: normal; height:60px;">
+                            {{express.second_bus_st != undefined ? express.second_bus_st.ST_STOPNM + ' >> ' + express.second_bus_st.ED_STOPNM : ''}}
+                        </h2>
+                        <h2 ng-show="express.third_bus_st != undefined" style="white-space: normal; height:60px;">
+                            {{express.third_bus_st != undefined ? express.third_bus_st.ST_STOPNM + ' >> ' + express.third_bus_st.ED_STOPNM : ''}}
+                        </h2>
+                        <h2 ng-show="express.second_metro_st != undefined" style="white-space: normal; height:60px;">
+                            {{express.second_metro_st != undefined ? express.second_metro_st.ST_METRONM+ ' >> ' + express.second_metro_st.ED_METRONM : ''}}
+                        </h2>
+                        <h2 style="white-space: normal; height:60px;">
+                            {{express.first.ST_TERMINALNM}} >> {{express.first.ED_TERMINALNM}}
+                        </h2>
+                        <h2 ng-show="express.second_bus_ed != undefined" style="white-space: normal; height:60px;">
+                            {{express.second_bus_ed != undefined ? express.second_bus_ed.ST_STOPNM + ' >> ' + express.second_bus_ed.ED_STOPNM : ''}}
+                        </h2>
+                        <h2 ng-show="express.second_metro_ed != undefined" style="white-space: normal; height:60px;">
+                            {{express.second_metro_ed != undefined ? express.second_metro_ed.ST_METRONM+ ' >> ' + express.second_metro_ed.ED_METRONM : ''}}
+                        </h2>
+                        <h2 ng-show="express.third_bus_ed != undefined" style="white-space: normal; height:60px;">
+                            {{express.third_bus_ed != undefined ? express.third_bus_ed.ST_STOPNM + ' >> ' + express.third_bus_ed.ED_STOPNM : ''}}
+                        </h2>
+                    </div>
+                    <div class="col-20">
+                        <vehicletype-directive ng-show="express.second_bus_st != undefined" vehicle-type="'B'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="express.third_bus_st != undefined" vehicle-type="'B'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="express.second_metro_st != undefined" vehicle-type="'M'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="express.first != undefined" vehicle-type="'E'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="express.second_bus_ed != undefined" vehicle-type="'B'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="express.second_metro_ed != undefined" vehicle-type="'M'" vehicle-train=""></vehicletype-directive>
+                        <vehicletype-directive ng-show="express.third_bus_ed != undefined" vehicle-type="'B'" vehicle-train=""></vehicletype-directive>
+                    </div>
+                </div>
+            </a>
+            <div class="item item-icon-right" ng-click="gotoplacedetail(express)">
+                <p>{{ (express.second_bus_st.VIA_DIST + express.third_bus_st.VIA_DIST + express.second_metro_st.VIA_DIST +
+                    express.first.VIA_DIST + express.second_bus_ed.VIA_DIST + express.second_metro_ed.VIA_DIST +
+                    express.third_bus_ed.VIA_DIST) / 1000}}km</p>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

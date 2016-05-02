@@ -1,0 +1,68 @@
+/* routedetail style */
+
+.route_line{
+    width: 8px;
+    height: 35px;
+    margin-right: auto;
+    margin-left: auto;
+    background-color: #cbcbcb;
+    /*background-color: #49cb3d;*/
+}
+.route_triangle {
+    border-top: 4px solid #cbcbcb;
+    /*border-top: 4px solid #49cb3d;*/
+    border-left: 4px solid transparent ;
+    border-right: 4px solid transparent;
+    margin-left: auto;
+    margin-right: auto;
+    width: 1mm;
+}
+
+.route_ribbon {
+    width: 0;
+    height: 0px;
+    border: 4px solid #cbcbcb;
+    /*border: 4px solid #49cb3d;*/
+    border-top: 0 solid;
+    border-bottom: 4px solid transparent;
+    margin-left: auto;
+    margin-right: auto;
+    -webkit-transform: rotateZ(180deg);
+    transform: rotateZ(180deg);
+}
+
+.rotate_route_ribbon {
+    width: 0;
+    height: 0px;
+    border: 4px solid #cbcbcb;
+    /*border: 4px solid #49cb3d;*/
+
+    border-top: 0 solid;
+    border-bottom: 4px solid transparent;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.rotate_route_triangle {
+    border-top: 4px solid #cbcbcb;
+    /*border-top: 4px solid #49cb3d;*/
+    border-left: 4px solid transparent ;
+    border-right: 4px solid transparent;
+    margin-left: auto;
+    margin-right: auto;
+    width: 1mm;
+    -webkit-transform: rotateZ(180deg);
+    transform: rotateZ(180deg);
+}
+
+.bus_icon_inRoute{
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+    padding:8px;
+}
+
+.item .badge+.badge{
+    /* ionic상에서 badge가 연달아 그려질 경우 margin-right:5px로 설정됨. 이를 제거. */
+    margin-right:0px;
+}

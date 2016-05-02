@@ -1,0 +1,22 @@
+<ion-view>
+    <ion-nav-title ui-sref="tabs.bookmark">
+        &nbsp;에버버스
+    </ion-nav-title>
+    <ion-content overflow-scroll="true" class="has-header">
+        <div class="row">
+            <div class="col col-75">
+                <label class="item item-input">
+                    <input type="text" placeholder="터치해서 출발지를 검색해 보세요" location-suggestion get-param="'start'"
+                           getplacedata="startinfo_placedata" ng-model="startinfo_placedata.place.description">
+                </label>
+                <label class="item item-input">
+                    <input type="text" placeholder="터치해서 도착지를 검색해 보세요" location-suggestion get-param="'end'"
+                           getplacedata="endinfo_placedata" ng-model="endinfo_placedata.place.description">
+                </label>
+            </div>
+            <div class="col">
+                <button class="button button-calm" style="height:90px; width:100%;" ng-click="search_placepath()">길 찾기</button>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

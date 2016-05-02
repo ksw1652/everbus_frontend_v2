@@ -1,0 +1,16 @@
+<ion-view view-title="지역 선택">
+    <ion-content scrollbar-x="false" overflow-scroll="true">
+
+            <div class="list" ng-repeat="division in all_division" style="margin-bottom: 0px; padding-bottom:0px;">
+                <!--<ion-checkbox ng-model="division.admin_checked">{{division.admin_division}}</ion-checkbox>-->
+                <div class="item item-divider">
+                    {{division.admin_division}}
+                </div>
+
+                <div class="list" style="padding-bottom:0px;">
+                    <ion-checkbox ng-repeat="region in division.data" ng-click="click_item()" ng-model="region.checked">{{region.regionnm}}</ion-checkbox>
+                </div>
+            </div>
+
+    </ion-content>
+</ion-view>

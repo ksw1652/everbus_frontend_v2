@@ -1,0 +1,73 @@
+<ion-view>
+    <ion-nav-back-button class="button-clear"><i class="ion-arrow-left-c"></i> 뒤로</ion-nav-back-button>
+    <ion-nav-title ui-sref="tabs.bookmark">
+        &nbsp;에버버스
+    </ion-nav-title>
+    <ion-nav-buttons side="right">
+        <button class="button button-icon ion-loop"
+                ng-click="refesh()"></button>
+        <button class="button button-icon ion-android-search"
+                ng-click="showFilterBar()"></button>
+    </ion-nav-buttons>
+    <ion-content overflow-scroll="true" padding="false" class="has-header">
+        <div class="card">
+            <div class="item item-divider">
+                <h2>{{::route_info.ROUTENM}}</h2>{{::route_info.ROUTEDESC}}
+            </div>
+            <div class="row" ng-show="route_info.STSTOPNM!=null && route_info.EDSTOPNM">
+                <div class="col">
+                    <p>기점 - {{::route_info.STSTOPNM}}</p>
+                </div>
+                <div class="col">
+                    <p>종점 - {{::route_info.EDSTOPNM}}</p>
+                </div>
+            </div>
+            <div class="row" ng-show ="route_info.STTM!=null && route_info.EDTM!=null ">
+                <div class="col">
+                    <p>첫차 - {{::route_info.STTM}}</p>
+                </div>
+                <div class="col">
+                    <p>막차 - {{route_info.EDTM}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col" ng-show ="route_info.INTERVALTM!=null">
+                    <p>배차 간격 - {{::route_info.INTERVALTM}}분</p>
+                </div>
+            </div>
+        </div>
+        <div class="button-bar">
+            <button id="up" class="button button-calm button-block" style="margin:0px;" ng-click="control_stop_list('up')">상행방향</button>
+            <button id="down" class="button button-light button-outline button-block  button-full" style="margin:0px;"
+                    ng-click="control_stop_list('dw')"
+                    ng-show="route_info.up_down_con">하행방향</button>
+        </div>
+        <ion-list>
+            <ion-item style="padding:0px;" ng-repeat="item in stop_list" >
+                <div class="row" style="padding:0px;">
+                    <div class="col" style="padding:0px;">
+                        <div class="route_line"></div>
+                        <div class="route_triangle"></div>
+
+                          <span class="badge badge-balanced" style="position:inherit; font-size:10px; margin-top:5px; margin-bottom:5px;"
+                                ng-show="item.real_bus==true">
+                              <i class="ionicons ion-android-bus" style="font-size:23px;"></i>
+                          </span>
+
+                        <div class="route_ribbon"></div>
+                        <div class="route_line"></div>
+                    </div>
+                    <div class="col col-75" style="padding-top: 20px; padding-left:15px;"
+                        ng-click="click_stop(item)">
+                        <h2>
+                            {{item.stopnm}}
+                        </h2>
+                        <h3 style="color:grey;">
+                            {{item.arsid}}
+                        </h3>
+                    </div>
+                </div>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>

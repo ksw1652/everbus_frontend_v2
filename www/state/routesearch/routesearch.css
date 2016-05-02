@@ -1,0 +1,80 @@
+/*
+* route-desc text align setting
+*/
+.desc-text-right{
+  text-align: right;
+}
+/*
+*   item padding zero
+*   >> using row and col
+*/
+.item-padding-zero{
+  padding: 0px;
+}
+
+.item-padding-five{
+  padding: 5px;
+}
+/*
+*   bus_type setting
+*/
+.bus_type_1
+{
+  color: #4aa1ff;
+}
+.bus_type_2
+{
+  color : #b5741a;
+}
+.bus_type_3
+{
+  color : #2936e8;
+}
+.bus_type_4
+{
+  color : #34ff41;
+}
+.bus_type_5
+{
+  color : #e1ff2b;
+}
+.bus_type_6
+{
+  color : #FF302F;
+}
+.bus_type_7
+{
+  color : #E8A612;
+}
+.bus_type_8
+{
+  color : #30ff4d;
+}
+.bus_type_9
+{
+   color : #34d0ab;
+ }
+.bus_type_10
+{
+  color : #5FD06E;
+}
+.bus_type_11
+{
+  color : #FF302F;
+}
+.bus_type_12
+{
+  color : #9b2ce8;
+}
+.bus_type_13
+{
+  color : #E8A612;
+}
+.bus_type_14
+{
+  color : #A09D9D;
+}
+.bus_type_15
+{
+  color : #1b1b1b;
+}

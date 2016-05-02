@@ -1,0 +1,47 @@
+<ion-view>
+    <ion-nav-title ui-sref="tabs.bookmark">
+        &nbsp;에버버스
+    </ion-nav-title>
+    <ion-content overflow-scroll="true" padding="false" class="has-header">
+
+        <label class="item item-input">
+            <i class="icon ion-search placeholder-icon"></i>
+            <input class="everbus_input" type="text" placeholder="노선번호를 입력하세요" ng-model="search_keyword"
+                   ng-change="route_search_key_up(search_keyword)">
+        </label>
+
+      <ion-list >
+        <ion-item ng-repeat="item in route_list | limitTo : limit_cnt | orderBy: routenm"
+             ng-class="item.isDivider ? 'item-divider':''" class="item-padding-five">
+          <span ng-if="item.isDivider">
+          {{item.divider}}
+          </span>
+          <div ng-if="!item.isDivider" ng-click="gotoroutedetail(item)" >
+            <div class="row">
+              <div class="col" bus-route-type-directive route-type="{{item.rtype}}">
+                {{item.rnm}}
+              </div>
+              <div class="col desc-text-right" ng-if="item.rdesc">
+                ({{item.rdesc}})
+              </div>
+            </div>
+              <div ng-if="item.stnm&&item.ednm" class="row">
+                <div class="col">
+                  <span>{{item.stnm}}</span> -> <span>{{item.ednm}}</span>
+                </div>
+              </div>
+          </div>
+        </ion-item>
+      </ion-list>
+
+      <ion-infinite-scroll
+        ng-if="infinite_con"
+        icon="ion-loading-c"
+        on-infinite="loadMoreData()"
+        distance="10%">
+
+      </ion-infinite-scroll>
+
+
+    </ion-content>
+</ion-view>

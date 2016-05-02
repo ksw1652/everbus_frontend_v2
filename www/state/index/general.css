@@ -1,0 +1,91 @@
+
+
+/* google web font */
+/*@import url(http://fonts.googleapis.com/earlyaccess/hanna.css);*/
+
+body, body h1, body h2, body h3, body h4, body h5, body h6, body span, body button, body textarea, body input {
+    font-family: "Hanna", sans-serif;
+}
+
+/* ng-cloak */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+
+/* background app color style */
+.pane {
+    background-color: #edf0f5;
+}
+
+.item-md-label {
+    background-color:#ffffff !important;
+}
+
+/* nav-bar 깜빡거림 방지 */
+.platform-android .header-item.title {
+    transition-duration: 0ms;
+}
+.platform-android .header-item.buttons {
+    transition-duration: 0ms;
+}
+
+.buttons.buttons-right.header-item {
+    top:0px;
+}
+
+/* ionic accordian style */
+.list .item.item-accordion {
+    line-height: 38px;
+    padding-top: 0;
+    padding-bottom: 0;
+    transition: 0.09s all linear;
+}
+.list .item.item-accordion.ng-hide {
+    line-height: 0px;
+}
+.list .item.item-accordion.ng-hide-add,
+.list .item.item-accordion.ng-hide-remove {
+    display: block !important;
+}
+
+/* ionic loading style */
+.loading-container .loading{
+    background-color : transparent;
+}
+
+/* Fix modal backdrop for smaller devices */
+@media (max-width: 679px) {
+    .active .modal-backdrop-bg {
+        opacity: .5; }
+    .modal-backdrop-bg {
+        -webkit-transition: opacity 300ms ease-in-out;
+        transition: opacity 300ms ease-in-out;
+        background-color: #000;
+        opacity: 0; } }
+
+
+/* generel style */
+.everbus_input{
+    font-size:18px !important;
+}
+
+.tabs-calm.tabs-icon-top .tab-nav.tabs{
+    border-bottom-width: 0px;
+}
+
+ion-filter-bar .item-input-wrapper{
+    border-bottom: 1px solid #FF565A !important;
+    background-color : #FF565A !important;
+}
+
+/*.angular-google-map-container { height: 300px; }*/
+
+.custom-circle {
+    height: 30px;
+    width: 30px;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 50%;
+    background: yellow;
+}

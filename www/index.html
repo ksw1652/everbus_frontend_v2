@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html ng-app="everbus">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <!--<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src  'self' 'unsafe-inline' *">-->
+    <meta http-equiv="Content-Security-Policy" content="default-src &apos;self&apos; *; style-src &apos;self&apos; &apos;unsafe-inline&apos; *; script-src &apos;self&apos; &apos;unsafe-inline&apos; &apos;unsafe-eval&apos; *">
+    <!--<meta http-equiv="Content-Security-Policy" content="default-src *; script-src &apos;self&apos; &apos;unsafe-inline&apos; &apos;unsafe-eval&apos; *; style-src  &apos;self&apos; &apos;unsafe-inline&apos; *">-->
+    <title></title>
+
+    <!--<link href="lib/ionic/css/ionic.min.css" rel="stylesheet">-->
+    <link href="css/ionic.app.css" rel="stylesheet">
+
+    <!--external style sheet-->
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/earlyaccess/hanna.css">
+    <link href="lib/ionic-filter-bar/ionic.filter.bar.min.css" rel="stylesheet">
+    <link href="lib/bs-callout/callout.css" rel="stylesheet">
+    <link href="lib/v-accordion/v-accordion.min.css" rel="stylesheet">
+    <link href="lib/ion-md-input/ion-md-input.min.css" rel="stylesheet">
+    <link href="lib/ion-nifty-modal/nifty.modal.css" rel="stylesheet">
+
+
+    <!--everbus style sheet-->
+    <!--<link href="state/index/general.css" rel="stylesheet">
+    <link href="state/index/index_style.css" rel="stylesheet">
+    <link href="state/bookmark/bookmark_style.css" rel="stylesheet">
+    <link href="state/placesearchresult/placesearchresult_style.css" rel="stylesheet">
+    <link href="state/placedetail/placedetail_style.css" rel="stylesheet">
+    <link href="state/placedetailfullmap/placedetailfullmap_style.css" rel="stylesheet">
+    <link href="state/routedetail/routedetail_style.css" rel="stylesheet">
+    <link href="state/shareplace/shareplace_style.css" rel="stylesheet">
+    <link href="state/shareplacesearchquery/shareplacesearchquery_style.css" rel="stylesheet">
+    <link href="state/shareplacemarkonthemap/shareplacemarkonthemap_style.css" rel="stylesheet">
+    <link href="state/stationdetail/stationdetail_style.css" rel="stylesheet">
+    <link href="state/sidemenus/sidemenus_style.css" rel="stylesheet">-->
+
+    <link href="final/css/index/general.css" rel="stylesheet">
+    <link href="final/css/index/index_style.css" rel="stylesheet">
+    <link href="final/css/bookmark/bookmark_style.css" rel="stylesheet">
+    <link href="final/css/placesearchresult/placesearchresult_style.css" rel="stylesheet">
+    <link href="final/css/placedetail/placedetail_style.css" rel="stylesheet">
+    <link href="final/css/placedetailfullmap/placedetailfullmap_style.css" rel="stylesheet">
+    <link href="final/css/routedetail/routedetail_style.css" rel="stylesheet">
+    <link href="final/css/shareplace/shareplace_style.css" rel="stylesheet">
+    <link href="final/css/shareplacesearchquery/shareplacesearchquery_style.css" rel="stylesheet">
+    <link href="final/css/shareplacemarkonthemap/shareplacemarkonthemap_style.css" rel="stylesheet">
+    <link href="final/css/stationdetail/stationdetail_style.css" rel="stylesheet">
+    <link href="final/css/sidemenus/sidemenus_style.css" rel="stylesheet">
+
+
+</head>
+<body ng-cloak="" ng-controller="indexCtrl">
+    <ion-side-menus>
+        <ion-side-menu-content drag-content="false">
+            <ion-nav-bar align-title="center" class="bar-calm">
+                <ion-nav-back-button class="button-clear"><i class="ion-arrow-left-c"></i> &#xB4A4;&#xB85C;</ion-nav-back-button>
+                <ion-nav-buttons side="right">
+                    <button class="button button-small button-icon icon ion-navicon" ng-click="showRightMenu()">
+                    </button>
+                </ion-nav-buttons>
+            </ion-nav-bar>
+            <ion-nav-view class="background"></ion-nav-view>
+        </ion-side-menu-content>
+
+        <ion-side-menu side="right">
+            <ion-header-bar class="bar bar-header bar-stable">
+                <h1 class="title">&#xC5D0;&#xBC84;&#xBC84;&#xC2A4; 3.0</h1>
+            </ion-header-bar>
+            <ion-content>
+                <ul class="list">
+                    <!--side menu에서의 menu-close directive는 history를 지워버림 -->
+                    <a class="item item-icon-left" ui-sref="tabs.bookmark" menu-close="">
+                        <i class="icon ion-ios-home"></i>
+                        &#xD648;&#xC73C;&#xB85C;
+                    </a>
+                    <a class="item item-icon-left" ui-sref="sidemenu_notice" menu-close="">
+                        <i class="icon ion-speakerphone"></i>
+                        &#xACF5;&#xC9C0;&#xC0AC;&#xD56D;
+                        <span class="badge badge-assertive" style="right:15px;">5</span>
+                    </a>
+                    <a class="item item-icon-left" ui-sref="sidemenu_selectregion" menu-close="">
+                        <i class="icon ion-android-checkbox-outline popover_icon"></i>
+                        &#xC9C0;&#xC5ED; &#xC120;&#xD0DD;
+                    </a>
+                    <a class="item item-icon-left" ui-sref="sidemenu_versioncheck" menu-close="">
+                        <i class="icon ion-android-playstore popover_icon"></i>
+                        &#xC571; &#xBC84;&#xC804; &#xCCB4;&#xD06C;
+                            <span class="item-note">
+                              &#xCD5C;&#xC2E0;
+                            </span>
+                    </a>
+                    <a class="item item-icon-left" ng-click="sendbugmail()">
+                        <i class="icon ion-ios-email-outline"></i>
+                        &#xC624;&#xB958; &#xBC0F; &#xBB38;&#xC758; &#xBA54;&#xC77C;
+                    </a>
+                    <!--<a class="item item-icon-left" ui-sref="sidemenu_removeappdata" menu-close="">
+                        <i class="icon ion-ios-trash-outline"></i>
+                        &#xC571; &#xB370;&#xC774;&#xD130; &#xC0AD;&#xC81C;
+                    </a>-->
+                </ul>
+            </ion-content>
+        </ion-side-menu>
+
+    </ion-side-menus>
+
+
+
+
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
+    <script src="cordova.js"></script>
+    <script src="js/commonJS/app.js"></script>
+    <script src="js/commonJS/routes.js"></script>
+
+    <script src="final/js/app.all.js"></script>
+    <script src="final/js/templates.js"></script>
+
+    <!--Controllers-->
+    <!--<script src="state/index/indexCtrl.js"></script>
+    <script src="state/tabs/tabsCtrl.js"></script>
+    <script src="state/sidemenus/sidemenusCtrl.js"></script>
+    <script src="state/bookmark/bookmarkCtrl.js"></script>
+    <script src="state/placedetail/placedetailCtrl.js"></script>
+    <script src="state/placedetailfullmap/placedetailfullmapCtrl.js"></script>
+    <script src="state/placesearch/placesearchCtrl.js"></script>
+    <script src="state/placesearchresult/placesearchresultCtrl.js"></script>
+    <script src="state/routedetail/routedetailCtrl.js"></script>
+    <script src="state/routesearch/routesearchCtrl.js"></script>
+    <script src="state/shareplace/shareplaceCtrl.js"></script>
+    <script src="state/shareplacesearchquery/shareplacesearchqueryCtrl.js"></script>
+    <script src="state/shareplacemarkonthemap/shareplacemarkonthemapCtrl.js"></script>
+    <script src="state/stationdetail/stationdetailCtrl.js"></script>
+    <script src="state/stationsearch/stationsearchCtrl.js"></script>
+
+    &lt;!&ndash;services&ndash;&gt;
+    <script src="js/services/busRouteService.js"></script>
+    <script src="js/services/busStopService.js"></script>
+    <script src="js/services/selectedAreaService.js"></script>
+
+
+    <script src="js/services/placeinfoService.js"></script>
+
+    <script src="js/services/placesearchFactory.js"></script>
+    <script src="js/services/placesearchnameFactory.js"></script>
+    <script src="js/services/placelatlngFactory.js"></script>
+    <script src="js/services/remodelingPathlistService.js"></script>
+    <script src="js/services/placedetailFactory.js"></script>
+    <script src="js/services/shareService.js"></script>
+    <script src="js/services/getappinfoService.js"></script>
+
+    &lt;!&ndash;directives&ndash;&gt;
+    <script src="js/directives/vehicletypeDirective.js"></script>
+    <script src="js/directives/drawTimeline.js"></script>
+    <script src="js/directives/vehiclelabelDirective.js"></script>-->
+
+    <!--filters-->
+
+
+    <!--external lib-->
+    <script src="lib/ionic-filter-bar/ionic.filter.bar.min.js"></script>
+    <script src="lib/ionicmapsAutocomplete/LocationService.js"></script>
+    <script src="lib/ionicmapsAutocomplete/locationSuggestion.js"></script>
+    <script src="lib/lodash/dist/lodash.min.js"></script>
+    <script src="lib/angular-simple-logger/dist/angular-simple-logger.min.js"></script>
+    <script src="lib/angular-google-maps/dist/angular-google-maps.min.js"></script>
+    <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-lQGVIG4Ljdc_oDIJFSOzKS2A3xqwbnU&?libraries=placeses,visualization,drawing,geometry,places">
+    </script>-->
+    <!--<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7t9-fE2k4bNl5L8MlRhxsOHbCDUoethk&libraries=places"></script>-->
+    <script src="https://maps.google.com/maps/api/js?key=AIzaSyB-lQGVIG4Ljdc_oDIJFSOzKS2A3xqwbnU&amp;libraries=placeses,visualization,drawing,geometry,places,geocoding"></script>
+    <script src="lib/v-accordion/v-accordion.min.js"></script>
+    <script src="lib/ion-md-input/ion-md-input.min.js"></script>
+    <script src="lib/ionic-pullup/ion-pullup.js"></script>
+    <script src="lib/ngStorage/ngStorage.min.js"></script>
+
+</body>
+
+<script id="location.html" type="text/ng-template">
+    <ion-modal-view ng-controller="placesearchCtrl">
+        <!--스코프 공유를 위하여 컨트롤러를 placesearchCtrl로 지정-->
+        <ion-header-bar class="item-input-inset">
+            <label class="item-input-wrapper">
+                <i class="icon ion-ios7-search placeholder-icon"></i>
+                <input type="search" ng-model="search.query" placeholder="장소명을 입력하세요">
+            </label>
+            <button class="button button-clear" ng-click="modal.hide()">
+                닫기
+            </button>
+        </ion-header-bar>
+        <ion-content>
+            <ion-list>
+                <!--<ion-item ng-show="search.error">
+                    {{search.error}}
+                </ion-item>-->
+                <ion-item ng-repeat="suggestion in search.suggestions" ng-click="choosePlace(suggestion)"
+                        style="font-size:12px;">
+                    {{suggestion.description}}
+                </ion-item>
+            </ion-list>
+            <img src="https://developers.google.com/maps/documentation/places/images/powered-by-google-on-white.png" alt="" />
+        </ion-content>
+    </ion-modal-view>
+</script>
+
+<script type="text/ng-template" id="current-position.tpl.html">
+    <a class="button icon ion-android-locate button-light" ng-click="currentBtn_clicked()"
+       style="margin-right:10px; margin-top:10px;">
+    </a>
+</script>
+
+</html>

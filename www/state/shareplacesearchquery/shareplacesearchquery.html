@@ -1,0 +1,39 @@
+<ion-view>
+    <ion-nav-title ui-sref="tabs.bookmark">
+        &nbsp;에버버스
+    </ion-nav-title>
+    <ion-content scroll="false" padding="false" class="has-header">
+        <!--<div class="button-bar">
+            <a class="button button-clear button-calm" style="border-radius: 0px 0px 0px 0px;"
+               ng-class="{'markonthemap_active': isActive('address')}" ng-click="setActive('address');">명칭으로 검색</a>
+            <a class="button button-clear button-calm" style="border-radius: 0px 0px 0px 0px;"
+               ng-class="{'markonthemap_active': isActive('markonmap')}" ng-click="setActive('markonmap');">지도 위에 표시</a>
+        </div>
+-->
+        <div class="list">
+            <div class="item-input-inset">
+                <label class="item-input-wrapper" style="background-color:white;">
+                    <i class="ionicons ion-ios7-search placeholder-icon"></i>
+                    <input class="shareplacemarkonthemap_input" type="search" ng-model="searchplace.query" placeholder="장소명을 입력하세요">
+                </label>
+            </div>
+            <ion-list>
+                <ion-item ng-repeat="suggestion in searchplace.suggestions" ng-click="choosePlace(suggestion)"
+                          style="font-size:12px;">
+                    {{suggestion.description}}
+                </ion-item>
+            </ion-list>
+            <img src="https://developers.google.com/maps/documentation/places/images/powered-by-google-on-white.png" alt="" />
+
+        </div>
+
+        <!--<div ng-if="active == 'markonmap'" data-tap-disabled="true">
+            <ui-gmap-google-map id="shareplacemarkonthemap" center='map.center' zoom='map.zoom' options="map.options">
+                <ui-gmap-map-control template="current-position.tpl.html" controller="shareplacemarkonthemapCtrl" position="top-right" index="-1"></ui-gmap-map-control>
+            </ui-gmap-google-map>
+        </div>-->
+
+
+
+    </ion-content>
+</ion-view>

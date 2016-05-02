@@ -1,0 +1,498 @@
+<ion-view>
+    <ion-nav-title ui-sref="tabs.bookmark">
+        &nbsp;에버버스
+    </ion-nav-title>
+    <ion-content padding="false" class="has-header">
+        <div id="map_canvas" data-tap-disabled="true">
+            <ui-gmap-google-map id="placedetailfullmap" center='map.center' zoom='map.zoom' options="map.options" control="map.control">
+                <ui-gmap-markers models="map.start_markers" coords="'self'" icon="'icon'"></ui-gmap-markers>
+                <ui-gmap-markers models="map.end_markers" coords="'self'" icon="'icon'"></ui-gmap-markers>
+                <ui-gmap-polyline path="polyline.path" stroke="polyline.stroke" visible='polyline.visible'
+                                  geodesic='polyline.geodesic' fit="false" editable="polyline.editable" draggable="polyline.draggable"></ui-gmap-polyline>
+            </ui-gmap-google-map>
+        </div>
+        <!-- deaprture -->
+        <ion-slide-box active-slide="active_slide_num" class="pathitem-slide" show-pager="false" on-slide-changed="slideChanged($index)">
+            <ion-slide>
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-pin"></i>
+                        </div>
+                        <div class="col col-60">
+                            <!--{{calculate_slideindex('departure')}}-->
+                            <h3 style="white-space: normal;">{{start_name}}에서 출발</h3>
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <!-- deaprture ~~ second_bus_st -->
+            <ion-slide ng-if="second_bus_st != undefined">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-walk"></i>
+                        </div>
+                        <div class="col col-60">
+                            {{calculate_slideindex('walk_1', departure_obj.st_obj.latitude, departure_obj.st_obj.longitude, second_bus_st.TR_ST_LAT, second_bus_st.TR_ST_LNG)}}
+                            <h3 style="white-space: normal;">{{second_bus_st.ST_STOPNM}}까지 {{second_bus_st.ST_DIST}}m 걷기</h3>
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-if="third_bus_st != undefined && second_metro_st != undefined">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-walk"></i>
+                        </div>
+                        <div class="col col-60">
+                            {{calculate_slideindex('walk_1', departure_obj.st_obj.latitude, departure_obj.st_obj.longitude, third_bus_st.TR_ST_LAT, third_bus_st.TR_ST_LNG)}}
+                            <h3 style="white-space: normal;">{{third_bus_st.ST_STOPNM}}까지 {{third_bus_st.ST_DIST}}m 걷기</h3>
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-if="third_bus_st == undefined && second_metro_st != undefined">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-walk"></i>
+                        </div>
+                        <div class="col col-60">
+                            {{calculate_slideindex('walk_1', departure_obj.st_obj.latitude, departure_obj.st_obj.longitude, second_metro_st.TR_ST_LAT, second_metro_st.TR_ST_LNG)}}
+                            <h3 style="white-space: normal;">{{second_metro_st.ST_METRONM}}까지 {{second_metro_st.ST_DIST}}m 걷기</h3>
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-if="third_bus_st == undefined && second_metro_st == undefined && second_bus_st == undefined && first.ST_DIST != 0">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-walk"></i>
+                        </div>
+                        <div class="col col-60">
+                            {{calculate_slideindex('walk_1', departure_obj.st_obj.latitude, departure_obj.st_obj.longitude, first.TR_ST_LAT, first.TR_ST_LNG)}}
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'M'">{{first.ST_METRONM}}까지 {{first.ST_DIST}}m 걷기</h3>
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'B'">{{first.ST_STOPNM}}까지 {{first.ST_DIST}}m 걷기</h3>
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'T'">{{first.ST_TRAIN_STOPNM}}까지 {{first.ST_DIST}}m 걷기</h3>
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'E'">{{first.ST_TERMINALNM}}까지 {{first.ST_DIST}}m 걷기</h3>
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-if="second_bus_st != undefined">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-bus"></i>
+                        </div>
+                        <div class="col col-60">
+                            {{calculate_slideindex('second_bus_st', second_bus_st.TR_ST_LAT, second_bus_st.TR_ST_LNG, second_bus_st.TR_ED_LAT, second_bus_st.TR_ED_LNG)}}
+                            <h3 style="white-space: normal;">{{second_bus_st.ST_STOPNM}}에서 승차</h3>
+                            <vehiclelabel-directive vehicle-flag="{{second_bus_st.FLAG}}" metro-line="" metroarea-name="" train-type=""
+                                                    busroute-type="{{second_bus_st.ROUTETYPE}}" busroute-name="{{second_bus_st.ROUTENM}}"></vehiclelabel-directive>
+                            <!--<h3 style="white-space: normal;">{{second_bus_st.ED_STOPNM}}에서 하차</h3>-->
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-if="third_bus_st != undefined">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-bus"></i>
+                        </div>
+                        <div class="col col-60">
+                            {{calculate_slideindex('third_bus_st', third_bus_st.TR_ST_LAT, third_bus_st.TR_ST_LNG, third_bus_st.TR_ED_LAT, third_bus_st.TR_ED_LNG)}}
+                            <h3 style="white-space: normal;">{{third_bus_st.ST_STOPNM}}에서 승차</h3>
+                            <vehiclelabel-directive vehicle-flag="{{third_bus_st.FLAG}}" metro-line="" metroarea-name=""
+                                                    train-type="" busroute-type="{{third_bus_st.ROUTETYPE}}"  busroute-name="{{third_bus_st.ROUTENM}}"></vehiclelabel-directive>
+                            <!--<h3 style="white-space: normal;">{{third_bus_st.ED_STOPNM}}에서 하차</h3>-->
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-if="third_bus_st != undefined">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-walk"></i>
+                        </div>
+                        <div class="col col-60">
+                            {{calculate_slideindex('walk_2', third_bus_st.TR_ED_LAT, third_bus_st.TR_ED_LNG, second_metro_st.TR_ST_LAT, second_metro_st.TR_ST_LNG)}}
+                            <h3 style="white-space: normal;">{{third_bus_st.ED_STOPNM}}에서 하차 후 {{second_metro_st.ST_METRONM}}까지 {{third_bus_st.ED_DIST}}m 걷기</h3>
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-if="second_metro_st!= undefined">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-subway"></i>
+                        </div>
+                        <div class="col col-60">
+                            {{calculate_slideindex('second_metro_st', second_metro_st.TR_ST_LAT, second_metro_st.TR_ST_LNG, second_metro_st.TR_ED_LAT, second_metro_st.TR_ED_LNG)}}
+                            <h3 style="white-space: normal;">{{second_metro_st.ST_METRONM}}에서 승차</h3>
+                            <vehiclelabel-directive vehicle-flag="{{second_metro_st.FLAG}}" metro-line="{{second_metro_st.ST_LINE}}"
+                                                    metroarea-name="{{second_metro_st.AREANM}}" train-type="" busroute-type="" busroute-name=""></vehiclelabel-directive>
+                            <!--<h3 style="white-space: normal;">{{second_metro_st.ED_METRONM}}에서 하차</h3>-->
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-if="second_bus_st != undefined">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-walk"></i>
+                        </div>
+                        <div class="col col-60">
+                            {{calculate_slideindex('walk_3', second_bus_st.TR_ED_LAT, second_bus_st.TR_ED_LNG, first.TR_ST_LAT, first.TR_ST_LNG)}}
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'M'">{{second_bus_st.ED_STOPNM}}에서 하차 후 {{first.ST_METRONM}}까지 {{second_bus_st.ED_DIST}}m 걷기</h3>
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'B'">{{second_bus_st.ED_STOPNM}}에서 하차 후 {{first.ST_STOPNM}}까지 {{second_bus_st.ED_DIST}}m 걷기</h3>
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'T'">{{second_bus_st.ED_STOPNM}}에서 하차 후 {{first.ST_TRAIN_STOPNM}}까지 {{second_bus_st.ED_DIST}}m 걷기</h3>
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'E'">{{second_bus_st.ED_STOPNM}}에서 하차 후 {{first.ST_TERMINALNM}}까지 {{second_bus_st.ED_DIST}}m 걷기</h3>
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-if="second_metro_st != undefined">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-walk"></i>
+                        </div>
+                        <div class="col col-60">
+                            {{calculate_slideindex('walk_3', second_metro_st.TR_ED_LAT, second_metro_st.TR_ED_LNG, first.TR_ST_LAT, first.TR_ST_LNG)}}
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'M'">{{second_metro_st.ED_METRONM}}에서 하차 후 {{first.ST_METRONM}}까지 {{second_metro_st.ED_DIST}}m 걷기</h3>
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'B'">{{second_metro_st.ED_METRONM}}에서 하차 후 {{first.ST_STOPNM}}까지 {{second_metro_st.ED_DIST}}m 걷기</h3>
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'T'">{{second_metro_st.ED_METRONM}}에서 하차 후 {{first.ST_TRAIN_STOPNM}}까지 {{second_metro_st.ED_DIST}}m 걷기</h3>
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'E'">{{second_metro_st.ED_METRONM}}에서 하차 후 {{first.ST_TERMINALNM}}까지 {{second_metro_st.ED_DIST}}m 걷기</h3>
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-if="first != undefined">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i ng-if="first.FLAG == 'M'" class="ion-android-subway"></i>
+                            <i ng-if="first.FLAG == 'B' || first.FLAG == 'E'" class="ion-android-bus"></i>
+                            <i ng-if="first.FLAG == 'T'" class="ion-android-train"></i>
+                        </div>
+                        <div class="col col-60">
+                            {{calculate_slideindex('first', first.TR_ST_LAT, first.TR_ST_LNG, first.TR_ED_LAT, first.TR_ED_LNG)}}
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'M'">{{first.ST_METRONM}}에서 탑승</h3>
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'B'">{{first.ST_STOPNM}}에서 탑승</h3>
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'T'">{{first.ST_TRAIN_STOPNM}}에서 탑승</h3>
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'E'">{{first.ST_TERMINALNM}}에서 탑승</h3>
+                            <vehiclelabel-directive vehicle-flag="{{first.FLAG}}" metro-line="{{first.ST_LINE}}" metroarea-name="{{first.AREANM}}"
+                                                    train-type="{{first.T_CD_DESC}}" busroute-type="{{first.ROUTETYPE}}" busroute-name="{{first.ROUTENM}}"></vehiclelabel-directive>
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-if="second_bus_ed != undefined">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-walk"></i>
+                        </div>
+                        <div class="col col-60">
+                            {{calculate_slideindex('walk_4', first.TR_ED_LAT, first.TR_ED_LNG, second_bus_ed.TR_ST_LAT, second_bus_ed.TR_ST_LNG)}}
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'M'">{{first.ED_METRONM}}에서 하차 후 {{second_bus_ed.ST_STOPNM}}까지 {{second_bus_ed.ST_DIST}}m 걷기</h3>
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'B'">{{first.ED_STOPNM}}에서 하차 후 {{second_bus_ed.ST_STOPNM}}까지 {{second_bus_ed.ST_DIST}}m 걷기</h3>
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'T'">{{first.ED_TRAIN_STOPNM}}에서 하차 후 {{second_bus_ed.ST_STOPNM}}까지 {{second_bus_ed.ST_DIST}}m 걷기</h3>
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'E'">{{first.ED_TERMINALNM}}에서 하차 후 {{second_bus_ed.ST_STOPNM}}까지 {{second_bus_ed.ST_DIST}}m 걷기</h3>
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-if="second_metro_ed != undefined">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-walk"></i>
+                        </div>
+                        <div class="col col-60">
+                            {{calculate_slideindex('walk_4', first.TR_ED_LAT, first.TR_ED_LNG, second_metro_ed.TR_ST_LAT, second_metro_ed.TR_ST_LNG)}}
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'M'">{{first.ED_METRONM}}에서 하차 후 {{second_metro_ed.ST_METRONM}}까지 {{second_metro_ed.ST_DIST}}m 걷기</h3>
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'B'">{{first.ED_STOPNM}}에서 하차 후 {{second_metro_ed.ST_METRONM}}까지 {{second_metro_ed.ST_DIST}}m 걷기</h3>
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'T'">{{first.ED_TRAIN_STOPNM}}에서 하차 후 {{second_metro_ed.ST_METRONM}}까지 {{second_metro_ed.ST_DIST}}m 걷기</h3>
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'E'">{{first.ED_TERMINALNM}}에서 하차 후 {{second_metro_ed.ST_METRONM}}까지 {{second_metro_ed.ST_DIST}}m 걷기</h3>
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-if="second_metro_ed != undefined">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-subway"></i>
+                        </div>
+                        <div class="col col-60">
+                            {{calculate_slideindex('second_metro_ed', second_metro_ed.TR_ST_LAT, second_metro_ed.TR_ST_LNG, second_metro_ed.TR_ED_LAT, second_metro_ed.TR_ED_LNG)}}
+                            <h3 style="white-space: normal;">{{second_metro_ed.ST_METRONM}}에서 승차</h3>
+                            <vehiclelabel-directive vehicle-flag="{{second_metro_ed.FLAG}}" metro-line="{{second_metro_ed.ST_LINE}}"
+                                                    metroarea-name="{{second_metro_ed.AREANM}}" train-type="" busroute-type="" busroute-name=""></vehiclelabel-directive>
+                            <!--<h3 style="white-space: normal;">{{second_metro_ed.ED_METRONM}}</h3>-->
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-if="third_bus_ed != undefined">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-walk"></i>
+                        </div>
+                        <div class="col col-60">
+                            {{calculate_slideindex('walk_5', second_metro_ed.TR_ED_LAT, second_metro_ed.TR_ED_LNG, third_bus_ed.TR_ST_LAT, third_bus_ed.TR_ST_LNG)}}
+                            <h3 style="white-space: normal;">{{second_metro_ed.ED_METRONM}}에서 하차 후 {{third_bus_ed.ST_STOPNM}}까지 {{third_bus_ed.ST_DIST}}m 걷기</h3>
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-if="third_bus_ed != undefined">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-bus"></i>
+                        </div>
+                        <div class="col col-60">
+                            {{calculate_slideindex('third_bus_ed', third_bus_ed.TR_ST_LAT, third_bus_ed.TR_ST_LNG, third_bus_ed.TR_ED_LAT, third_bus_ed.TR_ED_LNG)}}
+                            <h3 style="white-space: normal;">{{third_bus_ed.ST_STOPNM}}에서 승차</h3>
+                            <vehiclelabel-directive vehicle-flag="{{third_bus_ed.FLAG}}" metro-line=""
+                                                    metroarea-name="" train-type="" busroute-type="{{third_bus_ed.ROUTETYPE}}" busroute-name="{{third_bus_ed.ROUTENM}}"></vehiclelabel-directive>
+                            <!--<h3 style="white-space: normal;">{{third_bus_ed.ED_STOPNM}}</h3>-->
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-if="second_bus_ed != undefined">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-bus"></i>
+                        </div>
+                        <div class="col col-60">
+                            {{calculate_slideindex('second_bus_ed', second_bus_ed.TR_ST_LAT, second_bus_ed.TR_ST_LNG, second_bus_ed.TR_ED_LAT, second_bus_ed.TR_ED_LNG)}}
+                            <h3 style="white-space: normal;">{{second_bus_ed.ST_STOPNM}}에서 승차</h3>
+                            <vehiclelabel-directive vehicle-flag="{{second_bus_ed.FLAG}}" metro-line=""
+                                                    metroarea-name="" train-type="" busroute-type="{{second_bus_ed.ROUTETYPE}}" busroute-name="{{second_bus_ed.ROUTENM}}"></vehiclelabel-directive>
+                            <!--<h3 style="white-space: normal;">{{second_bus_ed.ED_STOPNM}}</h3>-->
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-if="second_bus_ed != undefined">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-walk"></i>
+                        </div>
+                        <div class="col col-60">
+                            {{calculate_slideindex('walk_6', second_bus_ed.TR_ED_LAT, second_bus_ed.TR_ED_LNG, arrival_obj.st_obj.latitude, arrival_obj.st_obj.longitude)}}
+                            <h3 style="white-space: normal;">{{second_bus_ed.ED_STOPNM}}에서 하차 후 {{end_name}}까지 {{second_bus_ed.ED_DIST}}m 걷기</h3>
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-if="third_bus_ed != undefined && second_metro_ed != undefined">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-walk"></i>
+                        </div>
+                        <div class="col col-60">
+                            {{calculate_slideindex('walk_6', third_bus_ed.TR_ED_LAT, third_bus_ed.TR_ED_LNG, arrival_obj.st_obj.latitude, arrival_obj.st_obj.longitude)}}
+                            <h3 style="white-space: normal;">{{third_bus_ed.ED_STOPNM}}에서 하차 후 {{end_name}}까지 {{third_bus_ed.ED_DIST}}m 걷기</h3>
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-if="third_bus_ed == undefined && second_metro_ed != undefined">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-walk"></i>
+                        </div>
+                        <div class="col col-60">
+                            {{calculate_slideindex('walk_6', second_metro_ed.TR_ED_LAT, second_metro_ed.TR_ED_LNG, arrival_obj.st_obj.latitude, arrival_obj.st_obj.longitude)}}
+                            <h3 style="white-space: normal;">{{second_metro_ed.ED_METRONM}}에서 하차 후 {{end_name}}까지 {{second_metro_ed.ED_DIST}}m 걷기</h3>
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-if="third_bus_ed == undefined && second_metro_ed == undefined && second_bus_ed == undefined && first.ED_DIST != 0">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-walk"></i>
+                        </div>
+                        <div class="col col-60">
+                            {{calculate_slideindex('walk_6', first.TR_ED_LAT, first.TR_ED_LNG, arrival_obj.st_obj.latitude, arrival_obj.st_obj.longitude)}}
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'M'">{{first.ED_METRONM}}에서 하차 후 {{end_name}}까지 {{first.ED_DIST}}m 걷기</h3>
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'B'">{{first.ED_STOPNM}}에서 하차 후 {{end_name}}까지 {{first.ED_DIST}}m 걷기</h3>
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'T'">{{first.ED_TRAIN_STOPNM}}에서 하차 후 {{end_name}}까지 {{first.ED_DIST}}m 걷기</h3>
+                            <h3 style="white-space: normal;" ng-if="first.FLAG == 'E'">{{first.ED_TERMINALNM}}에서 하차 후 {{end_name}}까지 {{first.ED_DIST}}m 걷기</h3>
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide>
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-back" ng-click="slideLeft()"></i>
+                        </div>
+                        <div class="col col-20" style="font-size:40px;">
+                            <i class="ion-android-pin"></i>
+                        </div>
+                        <div class="col col-60">
+                            <h3 style="white-space: normal;">{{end_name}} 도착</h3>
+                        </div>
+                        <div class="col col-10" style="font-size:40px;">
+                            <i class="icon ion-ios-arrow-forward" ng-click="slideRight()"></i>
+                        </div>
+                    </div>
+                </div>
+            </ion-slide>
+        </ion-slide-box>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,19 @@
+<ion-view>
+    <ion-tabs class="tabs-calm tabs-icon-top">
+        <ion-tab title="최근이용" icon="ion-bookmark" href="#/tabs/bookmark">
+            <ion-nav-view name="bookmark"></ion-nav-view>
+        </ion-tab>
+        <ion-tab title="노선" icon="ion-android-bus" ng-click="clickRoute()">
+            <ion-nav-view name="route"></ion-nav-view>
+        </ion-tab>
+        <ion-tab title="정류소" icon="ion-android-alarm-clock" ng-click="clickStop()">
+            <ion-nav-view name="station"></ion-nav-view>
+        </ion-tab>
+        <ion-tab title="길 찾기" icon="ion-map" href="#/tabs/placesearch">
+            <ion-nav-view name="place"></ion-nav-view>
+        </ion-tab>
+        <ion-tab title="스토리 보드" icon="ion-clipboard" href="#/tabs/shareplace">
+            <ion-nav-view name="share"></ion-nav-view>
+        </ion-tab>
+    </ion-tabs>
+</ion-view>

@@ -1,0 +1,17 @@
+/* shareplacemarkonmap style */
+#shareplacemarkonthemap .angular-google-map-container{
+    height:380px !important;
+}
+
+#shareplacemarkonthemap .angular-google-map-container:after {
+    width: 64px;
+    height: 64px;
+    display: block;
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    margin: -60px 0 0 0px;
+    background:url("../../img/down_hand.png") no-repeat;
+    background-size: 40px 50px; /* Since I used the HiDPI marker version this compensates for the 2x size */
+    pointer-events: none; /* This disables clicks on the marker. Not fully supported by all major browsers, though */
+}

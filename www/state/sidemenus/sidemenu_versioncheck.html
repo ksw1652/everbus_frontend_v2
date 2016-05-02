@@ -1,0 +1,24 @@
+<ion-view view-title="버전 체크">
+    <ion-content scrollbar-x="false" overflow-scroll="true">
+        <div style="padding:10px;">
+            <img class="everbus_logoimg" src="img/everbus_logo.png">
+            <div class="card">
+                <div class="item item-text-wrap">
+                    최신 버전 : {{lastest_app_version}}
+                </div>
+                <div class="item item-text-wrap" ng-style="lastest_app_version != current_deviceapp_version ? { 'color':'#FF565A' } : {}">
+                    현재 버전 : {{current_deviceapp_version}}
+                </div>
+                <div ng-show="lastest_app_version != current_deviceapp_version" class="item item-divider">
+                    현재 에버버스가 최신 버전이 아닙니다.
+                </div>
+                <div ng-show="lastest_app_version == current_deviceapp_version" class="item item-divider">
+                    현재 에버버스가 최신 버전입니다.
+                </div>
+            </div>
+            <a ng-show="lastest_app_version != current_deviceapp_version" class="button button-block button-positive" href="market://details?id=com.telerik.EVERBUS">
+                최신 버전 다운받으러 가기
+            </a>
+        </div>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,16 @@
+<ion-modal-view class="ion-nifty-modal" ng-click="close_aroundmodal()">
+    <div class="ion-modal-content-custom">
+        <ion-slide-box show-pager="true" >
+            <ion-slide ng-repeat="modal_obj_img in modal_obj.PHOTO_PATH">
+                <img class="full-image" ng-src="{{modal_obj_img}}">
+            </ion-slide>
+            <!--<ion-slide>
+                <img class="full-image" src="img/5.jpg">
+            </ion-slide>-->
+        </ion-slide-box>
+        <h3>{{modal_obj.title}}</h3>
+        <p>
+            {{modal_obj.content}}
+        </p>
+    </div>
+</ion-modal-view>

@@ -1,0 +1,16 @@
+<ion-view view-title="공지사항">
+    <ion-content scrollbar-x="false" overflow-scroll="true">
+        <ion-list>
+            <ion-item ng-repeat="item in items" class="item item-text-wrap">
+                <div ng-click="toggleItem(item)" ng-class="isItemShown(item) ? 'item-expand active' : 'item-expand inactive'">
+                    <h2>{{ item.title }}</h2>
+                    <br>
+                    <p style="white-space: pre">{{ item.text }}</p>
+                </div>
+                <div ng-click="toggleItem(item)" class="item-expand-footer" style="text-align:center;">
+                    <i ng-class="isItemShown(item) ? 'ion-chevron-up' : 'ion-chevron-down'"></i>
+               </div>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>

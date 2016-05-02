@@ -1,0 +1,23 @@
+/* shareplacesearchquery style */
+
+.button.button-clear.button-calm.markonthemap_active{
+    color:#ffffff;
+    background-color: #FF565A;
+}
+
+/* do not group these rules */
+.shareplacemarkonthemap_input::-webkit-input-placeholder {
+    color: #595959;
+}
+.shareplacemarkonthemap_input:-moz-placeholder {
+    /* FF 4-18 */
+    color: #595959;
+}
+.shareplacemarkonthemap_input::-moz-placeholder {
+    /* FF 19+ */
+    color: #595959;
+}
+.shareplacemarkonthemap_input:-ms-input-placeholder {
+    /* IE 10+ */
+    color: #595959;
+}

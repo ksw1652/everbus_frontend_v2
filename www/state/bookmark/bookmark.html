@@ -1,0 +1,37 @@
+<ion-view>
+    <ion-nav-title ui-sref="tabs.bookmark">
+        &nbsp;에버버스
+    </ion-nav-title>
+    <ion-content overflow-scroll="true" padding="false" class="has-header">
+        <!--<div class="button-bar">
+            <a class="button button-clear button-calm"
+               ng-class="{'bookmark_active': isActive('recentuse')}" ng-click="setActive('recentuse');">최근이용</a>
+            <a class="button button-clear button-calm"
+               ng-class="{'bookmark_active': isActive('bookmark')}" ng-click="setActive('bookmark');">즐겨찾기</a>
+        </div>-->
+
+        <!--<ion-list ng-show="active == 'recentuse'" show-delete="shouldShowDelete">-->
+        <ion-list show-delete="shouldShowDelete">
+            <ion-item ng-repeat="item in recent_list | orderBy:'-'" class="item-icon-left bookmark_item" ng-click="recentitem_clicked(item)">
+                <ion-delete-button class="ion-minus-circled" ng-click="recent_list.splice($index, 1)"></ion-delete-button>
+                <i class="icon ion-map" style="font-size:25px;" ng-show="item.search_type=='place'"></i>
+                <h3 ng-show="item.search_type=='place'">{{item.start_name}}</h3>
+                <h3 ng-show="item.search_type=='place'">{{item.end_name}}</h3>
+
+                <i class="icon ion-android-bus" style="font-size:25px;" ng-show="item.search_type=='route'"></i>
+                <h3 ng-show="item.search_type=='route'">{{item.rnm}}</h3>
+                <p ng-show="item.search_type=='route'">{{item.stnm}} ~ {{item.ednm}}</p>
+
+                <i class="icon ion-android-alarm-clock" style="font-size:25px;" ng-show="item.search_type=='station'"></i>
+                <h3 ng-show="item.search_type=='station'">{{item.stopnm}}</h3>
+                <p ng-show="item.search_type=='station'">{{item.arsid == undefined ? item.stopid : item.arsid}}</p>
+            </ion-item>
+        </ion-list>
+        <!--<a ng-show="recent_list.length != 0 && active == 'recentuse'" class="item" style="text-align: center;" ng-click="shouldShowDelete = !shouldShowDelete">
+            최근이용 목록 편집
+        </a>-->
+        <a ng-show="recent_list.length != 0" class="item" style="text-align: center;" ng-click="shouldShowDelete = !shouldShowDelete">
+            최근이용 목록 편집
+        </a>
+    </ion-content>
+</ion-view>

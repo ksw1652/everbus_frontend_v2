@@ -1,0 +1,488 @@
+<ion-view>
+    <ion-nav-back-button class="button-clear"><i class="ion-arrow-left-c"></i> 뒤로</ion-nav-back-button>
+    <ion-nav-title>
+        &nbsp;에버버스
+    </ion-nav-title>
+    <ion-header-bar class="summing-path-header bar-subheader bar-stable">
+        <div>
+            <vehiclelabel-directive vehicle-flag="{{first.FLAG}}" metro-line="{{first.ST_LINE}}" metroarea-name="{{first.AREANM}}"
+                                train-type="{{first.T_CD_DESC}}" busroute-type="{{first.ROUTETYPE}}" busroute-name="{{first.ROUTENM}}"></vehiclelabel-directive>
+
+            {{start_name}} >> {{end_name}}
+            <span class="badge">{{ (first.ST_DIST + first.VIA_DIST + first.ED_DIST) / 1000}}km</span>
+        </div>
+
+    </ion-header-bar>
+    <ion-content overflow-scroll="true" padding="false" class="has-header">
+        <!--출발지 item-->
+        <a class="item timeline_item" style="padding-top:30px;" ng-click="goto_placedetailfullmap('departure')">
+            <div class="row">
+                <div class="col col-10">
+                    <div class="circle">
+                        <i class="ion-android-pin"></i>
+                    </div>
+                </div>
+                <div class="col col-90" style="white-space: normal;">
+                    <h2>{{start_name}}</h2>
+                </div>
+            </div>
+        </a>
+        <!--출발지 ~~ 첫번째 경로까지 걷기 경우의 수 3개-->
+        <a class="item timeline_item" ng-show="second_bus_st != undefined" ng-click="goto_placedetailfullmap('walk_1')">
+            <div class="row">
+                <div class="col col-10">
+                    <div class="walkline_up"></div>
+                    <div class="circle">
+                        <i class="ion-android-walk"></i>
+                    </div>
+                    <div class="walkline_down"></div>
+                </div>
+                <div class="col col-90" style="white-space: normal;">
+                    <h3 style="padding-top:35px;">{{second_bus_st.ST_DIST}}m 걷기</h3>
+                </div>
+            </div>
+        </a>
+        <a class="item timeline_item" ng-show="third_bus_st != undefined && second_metro_st != undefined" ng-click="goto_placedetailfullmap('walk_1')">
+            <div class="row">
+                <div class="col col-10">
+                    <div class="walkline_up"></div>
+                    <div class="circle">
+                        <i class="ion-android-walk"></i>
+                    </div>
+                    <div class="walkline_down"></div>
+                </div>
+                <div class="col col-90" style="white-space: normal;">
+                    <h3 style="padding-top:35px;">{{third_bus_st.ST_DIST}}m 걷기</h3>
+                </div>
+            </div>
+        </a>
+        <a class="item timeline_item" ng-show="third_bus_st == undefined && second_metro_st != undefined" ng-click="goto_placedetailfullmap('walk_1')">
+            <div class="row">
+                <div class="col col-10">
+                    <div class="walkline_up"></div>
+                    <div class="circle">
+                        <i class="ion-android-walk"></i>
+                    </div>
+                    <div class="walkline_down"></div>
+                </div>
+                <div class="col col-90" style="white-space: normal;">
+                    <h3 style="padding-top:35px;">{{second_metro_st.ST_DIST}}m 걷기</h3>
+                </div>
+            </div>
+        </a>
+        <a class="item timeline_item" ng-show="third_bus_st == undefined && second_metro_st == undefined && second_bus_st == undefined && first.ST_DIST != 0" ng-click="goto_placedetailfullmap('walk_1')">
+            <div class="row">
+                <div class="col col-10">
+                    <div class="walkline_up"></div>
+                    <div class="circle">
+                        <i class="ion-android-walk"></i>
+                    </div>
+                    <div class="walkline_down"></div>
+                </div>
+                <div class="col col-90" style="white-space: normal;">
+                    <h3 style="padding-top:35px;">{{first.ST_DIST}}m 걷기</h3>
+                </div>
+            </div>
+        </a>
+
+
+        <a class="item timeline_item" ng-show="second_bus_st != undefined" ng-click="goto_placedetailfullmap('second_bus_st')">
+            <div class="row">
+                <div class="col col-10">
+                    <draw-timeline vehicle-flag="{{second_bus_st.FLAG}}" metro-line="" metroarea-name="" train-type="" busroute-type="{{second_bus_st.ROUTETYPE}}"></draw-timeline>
+                </div>
+                <div class="col col-90">
+                    <h2>{{second_bus_st.ST_STOPNM}}</h2><br>
+                    <vehiclelabel-directive vehicle-flag="{{second_bus_st.FLAG}}" metro-line="" metroarea-name="" train-type=""
+                                            busroute-type="{{second_bus_st.ROUTETYPE}}" busroute-name="{{second_bus_st.ROUTENM}}"></vehiclelabel-directive><br><br>
+
+                    <h2 ng-show="second_bus_st_TR != undefined">{{second_bus_st_TR.bus.stop.dpt.stopnm}}에서 하차 후</h2>
+                    <h2 ng-show="second_bus_st_TR == undefined">{{second_bus_st.ED_STOPNM}}</h2>
+                </div>
+            </div>
+        </a>
+        <!--second_bus_st TR_INFO item-->
+        <a class="item timeline_item" ng-show="second_bus_st_TR != undefined" ng-click="">
+            <div class="row">
+                <div class="col col-10">
+                    <draw-timeline vehicle-flag="B" metro-line="" metroarea-name="" train-type="" busroute-type="{{second_bus_st_TR.bus.route.routetype}}"></draw-timeline>
+                </div>
+                <div class="col col-90">
+                    <h2>{{second_bus_st_TR.bus.stop.arv.stopnm}}에서 환승</h2><br>
+                    <vehiclelabel-directive vehicle-flag="B" metro-line="" metroarea-name="" train-type=""
+                                            busroute-type="{{second_bus_st_TR.bus.route.routetype}}" busroute-name="{{second_bus_st_TR.bus.route.routenm}}"></vehiclelabel-directive><br><br>
+                    <h2>{{second_bus_st.ED_STOPNM}}</h2>
+                </div>
+            </div>
+        </a>
+        <!--third_bus_st item-->
+        <a class="item timeline_item" ng-show="third_bus_st != undefined" ng-click="goto_placedetailfullmap('third_bus_st')">
+            <div class="row">
+                <div class="col col-10">
+                    <draw-timeline vehicle-flag="{{third_bus_st.FLAG}}" metro-line="" metroarea-name="" train-type="" busroute-type="{{third_bus_st.ROUTETYPE}}"></draw-timeline>
+                </div>
+                <div class="col col-90">
+                    <h2>{{third_bus_st.ST_STOPNM}}</h2><br>
+                    <vehiclelabel-directive vehicle-flag="{{third_bus_st.FLAG}}" metro-line="" metroarea-name=""
+                                            train-type="" busroute-type="{{third_bus_st.ROUTETYPE}}"  busroute-name="{{third_bus_st.ROUTENM}}"></vehiclelabel-directive><br><br>
+
+                    <h2 ng-show="third_bus_st_TR != undefined">{{third_bus_st_TR.bus.stop.dpt.stopnm}}에서 하차 후</h2>
+                    <h2 ng-show="third_bus_st_TR == undefined">{{third_bus_st.ED_STOPNM}}</h2>
+                </div>
+            </div>
+        </a>
+        <!--third_bus_st TR_INFO item-->
+        <a class="item timeline_item" ng-show="third_bus_st_TR != undefined" ng-click="">
+            <div class="row">
+                <div class="col col-10">
+                    <draw-timeline vehicle-flag="B" metro-line="" metroarea-name="" train-type="" busroute-type="{{third_bus_st_TR.bus.route.routetype}}"></draw-timeline>
+                </div>
+                <div class="col col-90">
+                    <h2>{{third_bus_st_TR.bus.stop.arv.stopnm}}에서 환승</h2><br>
+                    <vehiclelabel-directive vehicle-flag="B" metro-line="" metroarea-name="" train-type=""
+                                            busroute-type="{{third_bus_st_TR.bus.route.routetype}}" busroute-name="{{third_bus_st_TR.bus.route.routenm}}"></vehiclelabel-directive><br><br>
+                    <h2>{{third_bus_st.ED_STOPNM}}</h2>
+                </div>
+            </div>
+        </a>
+        <!--third_bus_st ~~ second_metro_st 까지 걷기-->
+        <a class="item timeline_item" ng-show="third_bus_st != undefined" ng-click="goto_placedetailfullmap('walk_2')">
+            <div class="row">
+                <div class="col col-10">
+                    <div class="walkline_up"></div>
+                    <div class="circle">
+                        <i class="ion-android-walk"></i>
+                    </div>
+                    <div class="walkline_down"></div>
+                </div>
+                <div class="col col-90" style="white-space: normal;">
+                    <h3 style="padding-top:35px;">{{third_bus_st.ED_DIST}}m 걷기</h3>
+                </div>
+            </div>
+        </a>
+        <!--second_metro_st item-->
+        <a class="item timeline_item" ng-show="second_metro_st!= undefined" ng-click="goto_placedetailfullmap('second_metro_st')">
+            <div class="row">
+                <div class="col col-10">
+                    <draw-timeline vehicle-flag="{{second_metro_st.FLAG}}" metro-line="{{second_metro_st.ST_LINE}}" metroarea-name="{{second_metro_st.AREANM}}" train-type="" busroute-type=""></draw-timeline>
+                </div>
+                <div class="col col-90">
+                    <h2>{{second_metro_st.ST_METRONM}}</h2><br>
+                    <vehiclelabel-directive vehicle-flag="{{second_metro_st.FLAG}}" metro-line="{{second_metro_st.ST_LINE}}"
+                                            metroarea-name="{{second_metro_st.AREANM}}" train-type="" busroute-type="" busroute-name=""></vehiclelabel-directive><br><br>
+                    <h2 ng-show="second_metro_st_TR == undefined">{{second_metro_st.ED_METRONM}}</h2>
+                </div>
+            </div>
+        </a>
+
+        <!--second metro st transform-->
+        <a class="item timeline_item" ng-show="second_metro_st_TR != undefined" ng-repeat="item in second_metro_st_TR" ng-click="goto_placedetailfullmap('second_metro_st')">
+            <div class="row">
+                <div class="col col-10">
+                    <draw-timeline vehicle-flag="{{second_metro_st.FLAG}}" metro-line="{{item.line}}" metroarea-name="{{second_metro_st.AREANM}}" train-type="" busroute-type=""></draw-timeline>
+                </div>
+                <div class="col col-90">
+                    <h2>{{item.metronm}}</h2>
+                    <br>
+
+                    <vehiclelabel-directive vehicle-flag="{{second_metro_st.FLAG}}" metro-line="{{item.line}}" metroarea-name="{{second_metro_st.AREANM}}"
+                                            train-type="" busroute-type="" busroute-name=""></vehiclelabel-directive><br><br>
+
+                    <h2 ng-show="$last">{{second_metro_st.ED_METRONM}}</h2>
+                </div>
+            </div>
+        </a>
+
+        <!--second_bus_st ~~ main vehicle까지 걷기-->
+        <a class="item timeline_item" ng-show="second_bus_st != undefined" ng-click="goto_placedetailfullmap('walk_3')">
+            <div class="row">
+                <div class="col col-10">
+                    <div class="walkline_up"></div>
+                    <div class="circle">
+                        <i class="ion-android-walk"></i>
+                    </div>
+                    <div class="walkline_down"></div>
+                </div>
+                <div class="col col-90" style="white-space: normal;">
+                    <h3 style="padding-top:35px;">{{second_bus_st.ED_DIST}}m 걷기</h3>
+                </div>
+            </div>
+        </a>
+        <!--second_metro_st ~~ main vehicle까지 걷기-->
+        <a class="item timeline_item" ng-show="second_metro_st != undefined" ng-click="goto_placedetailfullmap('walk_3')">
+            <div class="row">
+                <div class="col col-10">
+                    <div class="walkline_up"></div>
+                    <div class="circle">
+                        <i class="ion-android-walk"></i>
+                    </div>
+                    <div class="walkline_down"></div>
+                </div>
+                <div class="col col-90" style="white-space: normal;">
+                    <h3 style="padding-top:35px;">{{second_metro_st.ED_DIST}}m 걷기</h3>
+                </div>
+            </div>
+        </a>
+        <!--main vehicle item-->
+        <a class="item timeline_item" ng-show="first != undefined" ng-click="goto_placedetailfullmap('first')">
+            <div class="row">
+                <div class="col col-10">
+                    <draw-timeline vehicle-flag="{{first.FLAG}}" metro-line="{{first.ST_LINE}}" metroarea-name="{{first.AREANM}}" train-type="{{first.T_CD_DESC}}" busroute-type="{{first.ROUTETYPE}}"></draw-timeline>
+                </div>
+                <div class="col col-90">
+                    <h2 ng-show="first.FLAG == 'M'">{{first.ST_METRONM}}</h2>
+                    <h2 ng-show="first.FLAG == 'B'">{{first.ST_STOPNM}}</h2>
+                    <h2 ng-show="first.FLAG == 'T'">{{first.ST_TRAIN_STOPNM}}</h2>
+                    <h2 ng-show="first.FLAG == 'E'">{{first.ST_TERMINALNM}}</h2>
+                    <br>
+
+                    <vehiclelabel-directive vehicle-flag="{{first.FLAG}}" metro-line="{{first.ST_LINE}}" metroarea-name="{{first.AREANM}}"
+                                            train-type="{{first.T_CD_DESC}}" busroute-type="{{first.ROUTETYPE}}" busroute-name="{{first.ROUTENM}}"></vehiclelabel-directive><br><br>
+
+                    <h2 ng-show="first.FLAG == 'M' && first_TR == undefined">{{first.ED_METRONM}}</h2>
+                    <h2 ng-show="first.FLAG == 'B' ">{{first.ED_STOPNM}}</h2>
+                    <h2 ng-show="first.FLAG == 'T' ">{{first.ED_TRAIN_STOPNM}}</h2>
+                    <h2 ng-show="first.FLAG == 'E' ">{{first.ED_TERMINALNM}}</h2>
+                </div>
+            </div>
+        </a>
+
+        <!--main metro transform-->
+        <a class="item timeline_item" ng-show="first_TR != undefined" ng-repeat="item in first_TR" ng-click="goto_placedetailfullmap('first')">
+            <div class="row">
+                <div class="col col-10">
+                    <draw-timeline vehicle-flag="{{first.FLAG}}" metro-line="{{item.line}}" metroarea-name="{{first.AREANM}}" train-type="" busroute-type=""></draw-timeline>
+                </div>
+                <div class="col col-90">
+                    <h2>{{item.metronm}}</h2>
+                    <br>
+
+                    <vehiclelabel-directive vehicle-flag="{{first.FLAG}}" metro-line="{{item.line}}" metroarea-name="{{first.AREANM}}"
+                                            train-type="" busroute-type="" busroute-name=""></vehiclelabel-directive><br><br>
+
+                    <h2 ng-show="$last">{{first.ED_METRONM}}</h2>
+                </div>
+            </div>
+        </a>
+
+
+
+
+        <!--main vehicle ~~ second_bus_ed까지 걷기-->
+        <a class="item timeline_item" ng-show="second_bus_ed != undefined" ng-click="goto_placedetailfullmap('walk_4')">
+            <div class="row">
+                <div class="col col-10">
+                    <div class="walkline_up"></div>
+                    <div class="circle">
+                        <i class="ion-android-walk"></i>
+                    </div>
+                    <div class="walkline_down"></div>
+                </div>
+                <div class="col col-90" style="white-space: normal;">
+                    <h3 style="padding-top:35px;">{{second_bus_ed.ST_DIST}}m 걷기</h3>
+                </div>
+            </div>
+        </a>
+        <!--main vehicle ~~ second_metro_ed까지 걷기-->
+        <a class="item timeline_item" ng-show="second_metro_ed != undefined" ng-click="goto_placedetailfullmap('walk_4')">
+            <div class="row">
+                <div class="col col-10">
+                    <div class="walkline_up"></div>
+                    <div class="circle">
+                        <i class="ion-android-walk"></i>
+                    </div>
+                    <div class="walkline_down"></div>
+                </div>
+                <div class="col col-90" style="white-space: normal;">
+                    <h3 style="padding-top:35px;">{{second_metro_ed.ST_DIST}}m 걷기</h3>
+                </div>
+            </div>
+        </a>
+        <!--second_metro_ed item-->
+        <a class="item timeline_item" ng-show="second_metro_ed != undefined" ng-click="goto_placedetailfullmap('second_metro_ed')">
+            <div class="row">
+                <div class="col col-10">
+                    <draw-timeline vehicle-flag="{{second_metro_ed.FLAG}}" metro-line="{{second_metro_ed.ST_LINE}}" metroarea-name="{{second_metro_ed.AREANM}}" train-type="" busroute-type=""></draw-timeline>
+                </div>
+                <div class="col col-90">
+                    <h2>{{second_metro_ed.ST_METRONM}}</h2><br>
+                    <vehiclelabel-directive vehicle-flag="{{second_metro_ed.FLAG}}" metro-line="{{second_metro_ed.ST_LINE}}"
+                                            metroarea-name="{{second_metro_ed.AREANM}}" train-type="" busroute-type="" busroute-name=""></vehiclelabel-directive><br><br>
+                    <h2 ng-show="second_metro_ed_TR == undefined">{{second_metro_ed.ED_METRONM}}</h2>
+                </div>
+            </div>
+        </a>
+
+
+        <!--second metro ed transform-->
+        <a class="item timeline_item" ng-show="second_metro_ed_TR != undefined" ng-repeat="item in second_metro_ed_TR" ng-click="goto_placedetailfullmap('second_metro_ed')">
+            <div class="row">
+                <div class="col col-10">
+                    <draw-timeline vehicle-flag="{{second_metro_ed.FLAG}}" metro-line="{{item.line}}" metroarea-name="{{second_metro_ed.AREANM}}" train-type="" busroute-type=""></draw-timeline>
+                </div>
+                <div class="col col-90">
+                    <h2>{{item.metronm}}</h2>
+                    <br>
+
+                    <vehiclelabel-directive vehicle-flag="{{second_metro_ed.FLAG}}" metro-line="{{item.line}}" metroarea-name="{{second_metro_ed.AREANM}}"
+                                            train-type="" busroute-type="" busroute-name=""></vehiclelabel-directive><br><br>
+
+                    <h2 ng-show="$last">{{second_metro_ed.ED_METRONM}}</h2>
+                </div>
+            </div>
+        </a>
+
+        <!--second_metro_ed ~~ third_bus_ed까지 걷기-->
+        <a class="item timeline_item" ng-show="third_bus_ed != undefined" ng-click="goto_placedetailfullmap('walk_5')">
+            <div class="row">
+                <div class="col col-10">
+                    <div class="walkline_up"></div>
+                    <div class="circle">
+                        <i class="ion-android-walk"></i>
+                    </div>
+                    <div class="walkline_down"></div>
+                </div>
+                <div class="col col-90" style="white-space: normal;">
+                    <h3 style="padding-top:35px;">{{third_bus_ed.ST_DIST}}m 걷기</h3>
+                </div>
+            </div>
+        </a>
+        <!--third_bus_ed item-->
+        <a class="item timeline_item" ng-show="third_bus_ed != undefined" ng-click="goto_placedetailfullmap('third_bus_ed')">
+            <div class="row">
+                <div class="col col-10">
+                    <draw-timeline vehicle-flag="{{third_bus_ed.FLAG}}" metro-line="" metroarea-name="" train-type="" busroute-type="{{third_bus_ed.ROUTETYPE}}"></draw-timeline>
+                </div>
+                <div class="col col-90">
+                    <h2>{{third_bus_ed.ST_STOPNM}}</h2><br>
+                    <vehiclelabel-directive vehicle-flag="{{third_bus_ed.FLAG}}" metro-line=""
+                                            metroarea-name="" train-type="" busroute-type="{{third_bus_ed.ROUTETYPE}}" busroute-name="{{third_bus_ed.ROUTENM}}"></vehiclelabel-directive><br><br>
+
+                    <h2 ng-show="third_bus_ed_TR != undefined">{{third_bus_ed_TR.bus.stop.dpt.stopnm}}에서 하차 후</h2>
+                    <h2 ng-show="third_bus_ed_TR == undefined">{{third_bus_ed.ED_STOPNM}}</h2>
+                </div>
+            </div>
+        </a>
+        <!--third_bus_ed TR_INFO item-->
+        <a class="item timeline_item" ng-show="third_bus_ed_TR != undefined" ng-click="">
+            <div class="row">
+                <div class="col col-10">
+                    <draw-timeline vehicle-flag="B" metro-line="" metroarea-name="" train-type="" busroute-type="{{third_bus_ed_TR.bus.route.routetype}}"></draw-timeline>
+                </div>
+                <div class="col col-90">
+                    <h2>{{third_bus_ed_TR.bus.stop.arv.stopnm}}에서 환승</h2><br>
+                    <vehiclelabel-directive vehicle-flag="B" metro-line="" metroarea-name="" train-type=""
+                                            busroute-type="{{third_bus_ed_TR.bus.route.routetype}}" busroute-name="{{third_bus_ed_TR.bus.route.routenm}}"></vehiclelabel-directive><br><br>
+                    <h2>{{third_bus_ed.ED_STOPNM}}</h2>
+                </div>
+            </div>
+        </a>
+
+        <!--second_bus_ed item-->
+        <a class="item timeline_item" ng-show="second_bus_ed != undefined" ng-click="goto_placedetailfullmap('second_bus_ed')">
+            <div class="row">
+                <div class="col col-10">
+                    <draw-timeline vehicle-flag="{{second_bus_ed.FLAG}}" metro-line="" metroarea-name="" train-type="" busroute-type="{{second_bus_ed.ROUTETYPE}}"></draw-timeline>
+                </div>
+                <div class="col col-90">
+                    <h2>{{second_bus_ed.ST_STOPNM}}</h2><br>
+                    <vehiclelabel-directive vehicle-flag="{{second_bus_ed.FLAG}}" metro-line=""
+                                            metroarea-name="" train-type="" busroute-type="{{second_bus_ed.ROUTETYPE}}" busroute-name="{{second_bus_ed.ROUTENM}}"></vehiclelabel-directive><br><br>
+
+                    <h2 ng-show="second_bus_ed_TR != undefined">{{second_bus_ed_TR.bus.stop.dpt.stopnm}}에서 하차 후</h2>
+                    <h2 ng-show="second_bus_ed_TR == undefined">{{second_bus_ed.ED_STOPNM}}</h2>
+                </div>
+            </div>
+        </a>
+
+        <!--third_bus_ed TR_INFO item-->
+        <a class="item timeline_item" ng-show="second_bus_ed_TR != undefined" ng-click="">
+            <div class="row">
+                <div class="col col-10">
+                    <draw-timeline vehicle-flag="B" metro-line="" metroarea-name="" train-type="" busroute-type="{{second_bus_ed_TR.bus.route.routetype}}"></draw-timeline>
+                </div>
+                <div class="col col-90">
+                    <h2>{{second_bus_ed_TR.bus.stop.arv.stopnm}}에서 환승</h2><br>
+                    <vehiclelabel-directive vehicle-flag="B" metro-line="" metroarea-name="" train-type=""
+                                            busroute-type="{{second_bus_ed_TR.bus.route.routetype}}" busroute-name="{{second_bus_ed_TR.bus.route.routenm}}"></vehiclelabel-directive><br><br>
+                    <h2>{{second_bus_ed.ED_STOPNM}}</h2>
+                </div>
+            </div>
+        </a>
+
+        <!--마지막 경로 ~~ 도착지까지 걷기 경우의 수 3개-->
+        <a class="item timeline_item" ng-show="second_bus_ed != undefined" ng-click="goto_placedetailfullmap('walk_6')">
+            <div class="row">
+                <div class="col col-10">
+                    <div class="walkline_up"></div>
+                    <div class="circle">
+                        <i class="ion-android-walk"></i>
+                    </div>
+                    <div class="walkline_down"></div>
+                </div>
+                <div class="col col-90" style="white-space: normal;">
+                    <br><br>
+                    <h3>{{second_bus_ed.ED_DIST}}m 걷기</h3>
+                </div>
+            </div>
+        </a>
+        <a class="item timeline_item" ng-show="third_bus_ed != undefined && second_metro_ed != undefined" ng-click="goto_placedetailfullmap('walk_6')">
+            <div class="row">
+                <div class="col col-10">
+                    <div class="walkline_up"></div>
+                    <div class="circle">
+                        <i class="ion-android-walk"></i>
+                    </div>
+                    <div class="walkline_down"></div>
+                </div>
+                <div class="col col-90" style="white-space: normal;">
+                    <h3 style="padding-top:35px;">{{third_bus_ed.ED_DIST}}m 걷기</h3>
+                </div>
+            </div>
+        </a>
+        <a class="item timeline_item" ng-show="third_bus_ed == undefined && second_metro_ed != undefined" ng-click="goto_placedetailfullmap('walk_6')">
+            <div class="row">
+                <div class="col col-10">
+                    <div class="walkline_up"></div>
+                    <div class="circle">
+                        <i class="ion-android-walk"></i>
+                    </div>
+                    <div class="walkline_down"></div>
+                </div>
+                <div class="col col-90" style="white-space: normal;">
+                    <h3 style="padding-top:35px;">{{second_metro_ed.ED_DIST}}m 걷기</h3>
+                </div>
+            </div>
+        </a>
+        <a class="item timeline_item" ng-show="third_bus_ed == undefined && second_metro_ed == undefined && second_bus_ed == undefined && first.ED_DIST != 0" ng-click="goto_placedetailfullmap('walk_6')">
+            <div class="row">
+                <div class="col col-10">
+                    <div class="walkline_up"></div>
+                    <div class="circle">
+                        <i class="ion-android-walk"></i>
+                    </div>
+                    <div class="walkline_down"></div>
+                </div>
+                <div class="col col-90" style="white-space: normal;">
+                    <h3 style="padding-top:35px;">{{first.ED_DIST}}m 걷기</h3>
+                </div>
+            </div>
+        </a>
+
+        <!--도착지 item-->
+        <a class="item timeline_item" style="padding-bottom:30px;" ng-click="goto_placedetailfullmap('arrival')">
+            <div class="row">
+                <div class="col col-10">
+                    <div class="circle" style="">
+                        <i class="ion-android-pin"></i>
+                    </div>
+                    <!--<div class="line_down" style="border: none;"></div>-->
+                </div>
+                <div class="col col-90" style="white-space: normal;">
+                    <h2>{{end_name}}</h2>
+                </div>
+            </div>
+        </a>
+
+    </ion-content>
+</ion-view>
